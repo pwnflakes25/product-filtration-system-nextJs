@@ -4,7 +4,7 @@ import DUMMY_DATA from "../../dummy-data.json" assert { type: "json" };
 
 export default function handler(req, res) {
   if (req.method === "GET") {
-    const limit = 10;
+    const limit = 10; // the limit of item per page
 
     let { page, colorFamily, categoryTags, priceMin, priceMax } = req.query;
 
@@ -15,11 +15,10 @@ export default function handler(req, res) {
     );
 
     if (colorFamily || categoryTags || priceMin || priceMax) {
-      colorFamily = colorFamily && new Set(colorFamily.split("-"));
+      colorFamily = colorFamily && new Set(colorFamily.split("-")); // set for faster access than array
       categoryTags = categoryTags && new Set(categoryTags.split("-"));
 
-      // filter the items based on filter
-
+      // filter the items based on filter input
       filteredProduct = filteredProduct.filter((node) => {
         const containsColor =
           colorFamily && colorFamily.size !== 0
