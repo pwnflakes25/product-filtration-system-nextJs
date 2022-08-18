@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Filter from "../components/Filter/Filter";
 import Products from "../components/Products/Products";
 import useSWR from "swr";
+import PaginationControl from "../components/UI/PaginationControl";
 
 const fetcher = async (url) => {
   const res = await fetch(url);
@@ -12,17 +13,25 @@ const Home = (props) => {
   const [filter, modifyFilter] = useState({
     colorFamily: [],
     categoryTags: [],
-    priceMin: '',
-    priceMax: '',
+    priceMin: "",
+    priceMax: "",
   });
-  
 
+  const [pageIndex, modifyPageIndex] = useState(1);
 
   const onFilterChangeHandler = (newFilterValue) => {
     modifyFilter(newFilterValue);
   };
 
-  const url = `http://localhost:3000/api/initialproducts?colorFamily=${filter.colorFamily.join(
+  const nextPageHandler = () => {
+    modifyPageIndex((pageIndexCurrent) => pageIndexCurrent + 1);
+  };
+
+  const prevPageHandler = () => {
+    modifyPageIndex((pageIndexCurrent) => pageIndexCurrent - 1);
+  };
+
+  const url = `http://localhost:3000/api/initialproducts?page=${pageIndex}&colorFamily=${filter.colorFamily.join(
     "-"
   )}&categoryTags=${filter.categoryTags.join("-")}&priceMin=${
     filter.priceMin
@@ -38,7 +47,18 @@ const Home = (props) => {
   return (
     <section>
       <Filter filter={filter} changeFilter={onFilterChangeHandler} />
-      <Products products={data}></Products>;
+      {data.products.length ? (
+        <Products products={data.products}></Products>
+      ) : (
+        <h2 className="text-4xl text-center my-20">No Entries Found</h2>
+      )}
+      ;
+      <PaginationControl
+        entriesCount={data.entriesCount}
+        onNextPage={nextPageHandler}
+        onPrevPage={prevPageHandler}
+        pageIndex={pageIndex}
+      />
     </section>
   );
 };
@@ -56,7 +76,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      products,
+      products: products.products,
     },
   };
 }

@@ -1,7 +1,7 @@
 const ColorIcon = (props) => {
   return (
     <div
-      className="mr-2"
+      className="mr-2 border-2 border-neutral-400"
       style={{
         backgroundColor: props.color,
         borderRadius: "50%",

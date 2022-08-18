@@ -11,3 +11,7 @@ export const getColors = () => {
     .filter(x => x && x.name)
     .map((color) => color.name);
 };
+
+export const getTotalLength = () => {
+  return DUMMY_DATA.data.allContentfulProductPage.edges.length;
+}

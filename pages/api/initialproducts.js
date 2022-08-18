@@ -48,14 +48,13 @@ export default function handler(req, res) {
       });
     }
 
+    const entriesCount = filteredProduct.length;
+
     // slice to paginate
     filteredProduct = filteredProduct.slice(
       limit * (page - 1),
       limit * (page - 1) + limit
     );
-
-    console.log(filteredProduct);
-
-    res.status(200).json(filteredProduct);
+    res.status(200).json({products: filteredProduct, entriesCount});
   }
 }
